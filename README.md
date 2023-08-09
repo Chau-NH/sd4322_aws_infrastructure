@@ -1,1 +1,2 @@
-# sd4322_aws_infrastructure
+# AWS infrastructure
+- Create VPC, EC2, EKS, ECR
