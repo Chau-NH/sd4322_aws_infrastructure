@@ -3,6 +3,7 @@ variable "instance_type" {
     t2_micro = "t2.micro"
     t2_medium = "t2.medium"
     t3_medium = "t3.medium"
+    t3_large = "t3.large"
   }
 }
 

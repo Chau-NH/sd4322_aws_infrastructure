@@ -204,6 +204,11 @@ resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
   role       = aws_iam_role.eks-node-group-role.name
 }
 
+resource "aws_iam_role_policy_attachment" "AmazonEBSCSIDriverPolicy" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+  role       = aws_iam_role.eks-node-group-role.name
+}
+
 data "aws_ssm_parameter" "eks-ami-release-version" {
   name = "/aws/service/eks/optimized-ami/${aws_eks_cluster.eks-devops.version}/amazon-linux-2/recommended/release_version"
 }
@@ -218,6 +223,9 @@ resource "aws_eks_node_group" "node-group-devops" {
     aws_subnet.subnet-devops-1.id,
     aws_subnet.subnet-devops-2.id
   ]
+
+  instance_types = [var.instance_type.t3_large]
+  capacity_type = "SPOT"
 
   scaling_config {
     desired_size = 1
@@ -237,5 +245,6 @@ resource "aws_eks_node_group" "node-group-devops" {
     aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.AmazonEBSCSIDriverPolicy
   ]
 }
